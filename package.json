@@ -1,0 +1,9 @@
+{
+  "name": "WhatTheHappening",
+  "version": "0.0.1",
+  "description": "UCLA campus event map",
+  "main": "server.js",
+  "dependencies": {
+    "express": "~3.2.4"
+  }
+}

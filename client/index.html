@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en" ng-app>
+  <head>
+    <title>What the Happening?</title>
+    <link rel="icon" 
+      type="image/png" 
+      href="https://i.imgur.com/sfpCtEA.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/button.css">
+
+    <style>
+      html, body, #map
+            {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+      #map
+          {
+            margin-left: 250px;
+          }
+    #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+      .form-control {
+        width: 515px;
+      }
+      #infowindow-content {
+        display: none;
+      }
+      #map #infowindow-content {
+        display: inline;
+      }
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        margin-top: 15px;
+        padding: 0px 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input: {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
+      
+    </style>
+  </head>
+  <body style = "overflow: hidden; > 
+      <div class="panel-group" id="accordion">
+  <div class="panel panel-default">
+  </div>
+  </div>
+     <div id="wrapper" >
+        <div id="sidebar-wrapper" style="background-color:#f2f2f2;border-right: 4px solid #524d4d;" style="margin: 0; padding: 0; border: 0;">
+
+               
+            <ul class="sidebar-nav" >
+                <img src="/img/logo.png" alt="icon" class="alignnone size-full wp-image-156"/>
+                 <!--ADD AN EVENT WTH-->
+               
+                <li>
+                    <div class = "add-event" style="a:hover { color: #524d4d !important;" }>
+                    <a id="modal-toggle" data-toggle="modal" data-target="#theModal" href="#">
+                         </center><font face="Trebuchet MS" color=#e37222 size=4> <b>
+                          &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspADD AN EVENT
+                         </font></b>
+                    </a>
+                    </div>
+                    </li>
+                 <img src="/img/logo2.png" alt="icon" class="alignnone size-full wp-image-156"/>
+                 <div class = "spacer"></div>
+                {{#events}}
+                <li class="service-list">
+                  <div class = "list-item">
+                  <a class="aclass" data-toggle="collapse" data-parent="#accordion" href="#collapse{{Id}}">
+                    <font id="fontcolor" face="Trebuchet MS" style = "text-transform: uppercase;"color=#524d4d size=3 ><b>
+                         
+                         {{Name}}
+                         
+                    </font></b>
+                  </a>
+                  </div>
+                    <div id="collapse{{Id}}" class="panel-collapse collapse">
+                    <font face="Trebuchet MS" color=#524d4d size=2>
+                     <div class="panel-body">
+                       <b>{{Location}} </br>
+                       Start: {{StartTime}}</br>
+                       End: {{EndTime}} </br></b>
+                       {{#Info}}
+                         {{.}}<br />
+                       {{/Info}}
+                     </div>
+                     </font>
+                    </div>
+                </li>
+                <br/>
+                                 <img src="/img/logo3.png" alt="icon" class="alignnone size-full wp-image-156"/>
+               {{/events}}
+
+            </ul>
+        </div>
+        <!-- Modal -->
+        
+    
+        
+        
+<div class="modal fade" id="theModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" style="pointer-events:none">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">Add an Event</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="newevent" id="modalform">
+          <input type="hidden" name="lat" value=34.0689>
+          <input type="hidden" name="long" value=-118.4452>
+          <div class="form-group">
+               <label for="name">Event Name</label>
+              <input class="form-control" type="text" name="name"/>
+            </div>
+            <div class="form-control">
+                   <label for="starttime">Starting Time</label>
+                   <input id="st" class="form-control" value="" type="datetime-local" name="starttime">
+           </div>
+            <div class="form-control">
+                   <label for="endtime">Ending Time</label>
+                   <input id="et" class="form-control" value="" type="datetime-local" name="endtime">
+           </div>
+             <div class="form-group">
+                   <label for="location">Location</label>
+                   <input class="form-control" type="text" name="loc">
+           </div>
+            <div class="form-group">
+            <label for="message-text" class="control-label">Description</label>
+            <textarea class="form-control" name="info"></textarea>
+          </div>
+     </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="submitForm()">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+    <div class="search-bar" style="position: absolute; z-index: 2">
+      <input id="pac-input" class="controls" type="text" placeholder="Search Box"></input>
+    </div>
+    <div id = "map"</div>
+    
+    
+    
+  <!--
+    FIREBASE
+            -->
+    
+    <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCFKju8wUAR8QHmfPfpfBUqgd2XU1wIjUk",
+    authDomain: "what-the-happening.firebaseapp.com",
+    databaseURL: "https://what-the-happening.firebaseio.com",
+    storageBucket: "what-the-happening.appspot.com",
+    messagingSenderId: "529767133832"
+  };
+  firebase.initializeApp(config);
+</script>
+    
+    
+     <script>
+     
+     var markers = [];
+     var current_marker;
+        var modal = document.querySelector('#modal-toggle');
+        modal.addEventListener('click', function(){
+          //console.log(this);
+          document.querySelector('#theModal').style.pointerEvents = 'auto';
+        })
+        function submitForm() {
+          if (!(document.getElementsByName("name")[0].value.length > 0)) {
+            alert("Must include name");
+          } else if (!(document.getElementsByName("loc")[0].value.length > 0)) {
+            alert("Must include location");
+          } else if (!(document.getElementsByName("info")[0].value.length > 0)) {
+            alert("Must include description");
+          } else if (document.getElementsByName("starttime")[0].value == "") {
+            alert("Must include a start time");
+          } else if (document.getElementsByName("endtime")[0].value == "") {
+            alert("Must include an end time");
+          } else {
+            markers.forEach(function(marker) {
+                marker.setMap(null);
+            })
+            var infowindow = new google.maps.InfoWindow({
+              content: "Drag this to the correct location and " +
+                       "<a onclick='confirmSubmit()'>confirm</a>"
+            });
+            infowindow.open(map, current_marker);
+            current_marker.setDraggable(true);
+            current_marker.addListener('click', function() {
+              infowindow.open(map, current_marker);
+            });
+          }
+        }
+        function confirmSubmit() {
+          document.getElementsByName("lat")[0].value = current_marker.getPosition().lat();
+          document.getElementsByName("long")[0].value = current_marker.getPosition().lng();
+          document.getElementById("modalform").submit();
+        }
+       function initMap(){
+         {{#events}}
+         infowindows.push( new google.maps.InfoWindow({
+              content: `<b>{{Name}}</b><br />
+                       {{Location}}<br />
+                       {{StartTime}}<br />{{EndTime}}<br />
+                       {{#Info}}
+                       {{.}}<br />
+                       {{/Info}}
+                       `
+            }));
+        {{/events}}
+         console.log(locations);
+         var ucla = {lat: 34.0689, lng: -118.4452};
+         var map = new google.maps.Map(document.getElementById('map'), {
+           zoom: 16,
+           center: ucla
+         });
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+        
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+        var markers_search= [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+          
+          markers_search.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers_search = [];
+        
+        var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+            
+            markers_search.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+            
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+            
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+        markers = locations.map(function(location, i) {
+          m = new google.maps.Marker({
+            position: location,
+            icon: 'img/orange.png',
+            //{url: 'img/marker.png', scaledSize: new google.maps.Size(22, 35)}
+          });
+          (function(m, i) {
+            m.addListener('click', function() {
+              infowindows[i].open(map, m);
+            });
+        
+        
+          }(m, i))
+          return m;
+        });
+        
+       
+       
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+       
+          //var infoWindow = new google.maps.InfoWindow({map: map});
+        // Try HTML5 geolocation.
+        
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            //infoWindow.setPosition(pos);
+            //infoWindow.setContent('Current Location');
+            current_marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            });
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          current_marker = new google.maps.Marker({
+            position: ucla,
+            map: map,
+            animation: google.maps.Animation.DROP,
+            });
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }  
+     
+    
+    } // end of init function      
+      
+      
+       // can add locations of markers 
+       var locations = [];
+       var infowindows = [];
+          {{#events}}
+              locations.push({ lat:{{Latitude}}, lng:{{Longitude}} })
+          {{/events}}
+          
+     </script>
+     
+    <script src='/js/jquery.min.js'></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK3rR7rzsnMiSTOgtWTc_weumtQlIqqbc&libraries=places&callback=initMap"
+         async defer></script>></script>  
+         
+         
+         
+  </body>
+</html>

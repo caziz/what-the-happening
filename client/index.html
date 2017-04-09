@@ -211,8 +211,9 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
 <script>
   // Initialize Firebase
+  import myConfig from 'config.js'
   var config = {
-    apiKey: "AIzaSyCFKju8wUAR8QHmfPfpfBUqgd2XU1wIjUk",
+    apiKey: myConfig.apiKey,
     authDomain: "what-the-happening.firebaseapp.com",
     databaseURL: "https://what-the-happening.firebaseio.com",
     storageBucket: "what-the-happening.appspot.com",
@@ -411,6 +412,7 @@
      </script>
      
     <script src='/js/jquery.min.js'></script>
+    <script src='/config.js'></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/angular.min.js"></script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
